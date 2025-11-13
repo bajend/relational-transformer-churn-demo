@@ -107,7 +107,7 @@ The model uses:
 
 ## Screenshots
 
-./Screenshot 2025-11-13 072022.jpg
+![Screenshot of churn demo](Screenshot%202025-11-13%20072022.jpg)
 
 ## Citation
 
