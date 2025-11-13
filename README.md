@@ -29,7 +29,7 @@ The demo uses:
 
 1. **Clone this repository**:
    ```bash
-   git clone https://github.com/yourusername/relational-transformer-churn-demo.git
+   git clone https://github.com/bajend/relational-transformer-churn-demo.git
    cd relational-transformer-churn-demo
    ```
 
