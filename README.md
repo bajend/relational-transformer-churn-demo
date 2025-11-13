@@ -107,7 +107,8 @@ The model uses:
 
 ## Screenshots
 
-*[Add screenshots here]*
+-Screenshot 2025-11-13 072022.jpg
+
 
 ## Citation
 
