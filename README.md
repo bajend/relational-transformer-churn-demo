@@ -107,8 +107,8 @@ The model uses:
 
 ## Screenshots
 
-*[Add screenshots here]*
-
+![Screenshot of churn demo](Screenshot%202025-11-13%20072022.jpg)
+![Screenshot of churn demo](Screenshot%202025-11-13%20072044.jpg)
 ## Citation
 
 If you use this demo, please cite the original Relational Transformer paper:
