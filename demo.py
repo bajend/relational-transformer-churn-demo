@@ -111,8 +111,19 @@ def prepare_batch(cells, seq_len=1024):
     is_targets = torch.zeros(len(cells), dtype=torch.bool)
     is_task_nodes = torch.ones(len(cells), dtype=torch.bool)  # Assume all task-related
     is_padding = torch.zeros(len(cells), dtype=torch.bool)
-    table_name_idxs = torch.zeros(len(cells))  # Mock indices
-    col_name_idxs = torch.zeros(len(cells))
+    table_name_idxs = torch.zeros(len(cells), dtype=torch.long)  # Mock indices
+    col_name_idxs = torch.zeros(len(cells), dtype=torch.long)
+    
+    table_to_idx = {}
+    col_to_idx = {}
+    
+    for i, (table, col, val, row_idx) in enumerate(cells):
+        table_idx = table_to_idx.setdefault(table, len(table_to_idx))
+        col_key = f"{table}.{col}"
+        col_idx = col_to_idx.setdefault(col_key, len(col_to_idx))
+        
+        table_name_idxs[i] = table_idx
+        col_name_idxs[i] = col_idx
     class_value_idxs = torch.full((len(cells),), -1)
     f2p_nbr_idxs = torch.full((len(cells), 5), -1)  # Mock links
     number_values = torch.zeros(len(cells), 1, dtype=dtype)
@@ -222,6 +233,9 @@ def predict_churn(customer_csv, product_csv, review_csv, customer_id, pred_times
         churn_logit = yhat_dict['boolean'][batch['is_targets']].item()
         prob = torch.sigmoid(torch.tensor(churn_logit)).item()
     
+    print(f"Debug: Customer {customer_id}, Timestamp {pred_timestamp}, Churn logit: {churn_logit:.4f}, Prob: {prob:.4f}")
+    print(f"Debug: Number of cells: {len(cells)}")
+    
     return f"Churn Probability: {prob:.2%} (>50% means likely churn: no reviews in next 3 months)"
 
 with gr.Blocks() as demo:
@@ -230,7 +244,7 @@ with gr.Blocks() as demo:
         customer_input = gr.TextArea(value=default_customer_csv, label="Customer Table (CSV)")
         product_input = gr.TextArea(value=default_product_csv, label="Product Table (CSV)")
     review_input = gr.TextArea(value=default_review_csv, label="Review Table (CSV)")
-    customer_id = gr.Dropdown(choices=['A1', 'A2', 'A3'], label="Customer ID to Predict")
+    customer_id = gr.Textbox(value="A1", label="Customer ID to Predict")
     pred_timestamp = gr.Textbox(value="2015-10-01", label="Prediction Timestamp (YYYY-MM-DD)")
     predict_btn = gr.Button("Predict Churn")
     output = gr.Textbox(label="Prediction", lines=2)
